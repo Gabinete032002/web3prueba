@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Conectar Wallet</title>
+</head>
+<body>
+  <button id="connectBtn">Conectar Wallet</button>
+
+  <!-- Carga el script como módulo -->
+  <script type="module">
+    import { Web3Modal } from 'https://unpkg.com/web3modal@3.0.3/dist/index.js';
+    import { ethers } from 'https://unpkg.com/ethers@6.6.2/dist/ethers.min.js';
+
+    const config = {
+      projectId: '73530f70f5e50c25934ffd6a5b29c518', // Tu propio projectId
+      themeMode: 'dark',
+      walletConnectVersion: 2,
+      chains: [
+        {
+          id: 1,
+          name: 'Ethereum',
+          rpcUrl: 'https://rpc.ankr.com/eth'
+        }
+      ]
+    };
+
+    const modal = new Web3Modal(config);
+
+    async function connectWallet() {
+      try {
+        const instance = await modal.connect();
+        const provider = new ethers.BrowserProvider(instance);
+        const signer = await provider.getSigner();
+        const address = await signer.getAddress();
+        alert("Conectado: " + address);
+        console.log("✅ Wallet:", address);
+      } catch (err) {
+        console.error("❌ Error al conectar:", err);
+      }
+    }
+
+    document.getElementById('connectBtn').addEventListener('click', connectWallet);
+  </script>
+</body>
+</html>
